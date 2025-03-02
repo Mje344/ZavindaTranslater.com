@@ -40,7 +40,8 @@
             "bad": "Vira", "fig": "Vira", "caged": "Nuvin", "bird": "Zol",
             "fire": "Tarin", "water": "Vem", "earth": "Drav", "light": "Liro",
             "sky": "Neko", "speak": "Gamar", "see": "Vitar", "shadow": "Xis",
-            "man": "Se", "will": "Et", "the": "La"
+            "man": "Se", "will": "Et", "the": "La",
+            "hi": "Navida", "zavaida": "𐌀"
         };
 
         // Zanvian Alphabet Conversion (for symbols)
@@ -57,9 +58,13 @@
             let translatedText = "";
             const words = inputText.toLowerCase().split(" ");
             for (const word of words) {
+                // Check if word exists in dictionary
                 if (zanvianDictionary[word]) {
                     translatedText += zanvianDictionary[word] + " ";
+                } else if (word.includes("𐌀")) { // Check if word is already in Zanvian symbols
+                    translatedText += "A" + " ";
                 } else {
+                    // Handle word by converting each character into Zanvian alphabet
                     let wordTranslation = "";
                     for (const letter of word) {
                         wordTranslation += zanvianAlphabet[letter] || letter;
@@ -79,4 +84,5 @@
     </script>
 </body>
 </html>
+
 
