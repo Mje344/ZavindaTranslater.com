@@ -3,39 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real-Time English to Zanvian Translator</title>
+    <title>English ↔ Zanvian Translator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
         }
-        #inputBox {
+        textarea {
             width: 100%;
             padding: 10px;
             font-size: 16px;
             margin-bottom: 10px;
         }
-        #outputBox {
+        .outputBox {
             margin-top: 20px;
-            font-size: 18px;
-        }
-        #zanvianOutput {
-            margin: 10px 0;
             font-size: 18px;
         }
     </style>
 </head>
 <body>
-    <h1>Real-Time English to Zanvian Translator</h1>
-    <textarea id="inputBox" rows="4" placeholder="Type in English"></textarea><br>
-
-    <div id="outputBox">
+    <h1>English ↔ Zanvian Translator</h1>
+    <textarea id="englishInput" rows="4" placeholder="Type in English"></textarea>
+    <textarea id="zanvianInput" rows="4" placeholder="Type in Zanvian"></textarea>
+    
+    <div class="outputBox">
         <h3>Translation (Zanvian):</h3>
         <div id="zanvianOutput"></div>
     </div>
+    
+    <div class="outputBox">
+        <h3>Translation (English):</h3>
+        <div id="englishOutput"></div>
+    </div>
 
     <script>
-        // Zanvian dictionary for words
         const zanvianDictionary = {
             "bad": "Vira", "fig": "Vira", "caged": "Nuvin", "bird": "Zol",
             "fire": "Tarin", "water": "Vem", "earth": "Drav", "light": "Liro",
@@ -43,8 +44,7 @@
             "man": "Se", "will": "Et", "the": "La",
             "hi": "Navida", "zavaida": "𐌀"
         };
-
-        // Zanvian Alphabet Conversion (for symbols)
+        
         const zanvianAlphabet = {
             "a": "𐌀", "b": "𐌁", "c": "𐌂", "d": "𐌃", "e": "𐌅", "f": "𐌆",
             "g": "𐌇", "h": "𐌉", "i": "𐌊", "j": "𐌋", "k": "𐌌", "l": "𐌍",
@@ -52,37 +52,33 @@
             "s": "𐌔", "t": "𐌕", "u": "𐌖", "v": "𐌗", "w": "𐌘", "x": "𐌙",
             "y": "𐌚", "z": "𐌛"
         };
-
-        // Function to translate English to Zanvian
+        
+        const reverseDictionary = Object.fromEntries(
+            Object.entries(zanvianDictionary).map(([key, value]) => [value.toLowerCase(), key])
+        );
+        
         function translateToZanvian(inputText) {
-            let translatedText = "";
-            const words = inputText.toLowerCase().split(" ");
-            for (const word of words) {
-                // Check if word exists in dictionary
-                if (zanvianDictionary[word]) {
-                    translatedText += zanvianDictionary[word] + " ";
-                } else if (word.includes("𐌀")) { // Check if word is already in Zanvian symbols
-                    translatedText += "A" + " ";
-                } else {
-                    // Handle word by converting each character into Zanvian alphabet
-                    let wordTranslation = "";
-                    for (const letter of word) {
-                        wordTranslation += zanvianAlphabet[letter] || letter;
-                    }
-                    translatedText += wordTranslation + " ";
-                }
-            }
-            return translatedText.trim();
+            return inputText.toLowerCase().split(" ").map(word => 
+                zanvianDictionary[word] || word.split("").map(letter => zanvianAlphabet[letter] || letter).join("")
+            ).join(" ");
         }
 
-        // Real-time translation event listener
-        document.getElementById("inputBox").addEventListener("input", function() {
-            const inputText = document.getElementById("inputBox").value;
-            const zanvianText = translateToZanvian(inputText);
-            document.getElementById("zanvianOutput").textContent = zanvianText;
+        function translateToEnglish(inputText) {
+            return inputText.split(" ").map(word => reverseDictionary[word.toLowerCase()] || word).join(" ");
+        }
+
+        document.getElementById("englishInput").addEventListener("input", function() {
+            const inputText = this.value;
+            document.getElementById("zanvianOutput").textContent = translateToZanvian(inputText);
+        });
+        
+        document.getElementById("zanvianInput").addEventListener("input", function() {
+            const inputText = this.value;
+            document.getElementById("englishOutput").textContent = translateToEnglish(inputText);
         });
     </script>
 </body>
 </html>
+
 
 
