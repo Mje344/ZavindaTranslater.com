@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time English to Zanvian Translator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #inputBox {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        #outputBox {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        #zanvianOutput {
+            margin: 10px 0;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Real-Time English to Zanvian Translator</h1>
+    <textarea id="inputBox" rows="4" placeholder="Type in English"></textarea><br>
+
+    <div id="outputBox">
+        <h3>Translation (Zanvian):</h3>
+        <div id="zanvianOutput"></div>
+    </div>
+
+    <script>
+        // Zanvian dictionary for words
+        const zanvianDictionary = {
+            "bad": "Vira", "fig": "Vira", "caged": "Nuvin", "bird": "Zol",
+            "fire": "Tarin", "water": "Vem", "earth": "Drav", "light": "Liro",
+            "sky": "Neko", "speak": "Gamar", "see": "Vitar", "shadow": "Xis",
+            "man": "Se", "will": "Et", "the": "La"
+        };
+
+        // Zanvian Alphabet Conversion (for symbols)
+        const zanvianAlphabet = {
+            "a": "𐌀", "b": "𐌁", "c": "𐌂", "d": "𐌃", "e": "𐌅", "f": "𐌆",
+            "g": "𐌇", "h": "𐌉", "i": "𐌊", "j": "𐌋", "k": "𐌌", "l": "𐌍",
+            "m": "𐌎", "n": "𐌏", "o": "𐌐", "p": "𐌑", "q": "𐌒", "r": "𐌓",
+            "s": "𐌔", "t": "𐌕", "u": "𐌖", "v": "𐌗", "w": "𐌘", "x": "𐌙",
+            "y": "𐌚", "z": "𐌛"
+        };
+
+        // Function to translate English to Zanvian
+        function translateToZanvian(inputText) {
+            let translatedText = "";
+            const words = inputText.toLowerCase().split(" ");
+            for (const word of words) {
+                if (zanvianDictionary[word]) {
+                    translatedText += zanvianDictionary[word] + " ";
+                } else {
+                    let wordTranslation = "";
+                    for (const letter of word) {
+                        wordTranslation += zanvianAlphabet[letter] || letter;
+                    }
+                    translatedText += wordTranslation + " ";
+                }
+            }
+            return translatedText.trim();
+        }
+
+        // Real-time translation event listener
+        document.getElementById("inputBox").addEventListener("input", function() {
+            const inputText = document.getElementById("inputBox").value;
+            const zanvianText = translateToZanvian(inputText);
+            document.getElementById("zanvianOutput").textContent = zanvianText;
+        });
+    </script>
+</body>
+</html>
+
